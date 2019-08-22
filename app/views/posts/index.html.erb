@@ -1,0 +1,41 @@
+<div class="col-sm-12 pt-3">
+  <%= search_form_for @q, class: "form-inline my-2 my-lg-0" do |f| %>
+    <%= f.search_field :title_or_body_cont, class: "form-control" %>
+    <%= f.submit 'キーワード検索', class: "btn btn-outline-primary my-2 my-sm-0 ml-3" %>
+  <% end %>
+</div>
+
+<div class="col-12 mb-3 mt-3">
+  <%= paginate @posts %>
+  <div class="text-center">
+    <%= page_entries_info @posts, entry_name: '相談事' %>
+  </div>
+</div>
+
+<% @posts.each do |post| %>
+  <div class="col-lg-6 col-md-12 col-sm-12 mb-3 mt-3 p-1">
+    <div class="card border-secondary bg-light mb-2 p-2">
+      <div class="card-header">
+        <%= link_to post.title, post_path(post), {:style=>'color: #696969;', :class => "css_class"} %>
+        <%= link_to "相談者: #{post.user.nick_name}さん", admin_user_path(post.user), {:style=>'color: #696969;', :class => "css_class float-right"} %>
+      </div>
+      <div class="card_body">
+        <p><%= truncate(post.body, length: 34) %></p>
+        <hr color="#000000">
+        <span><%= "#{post.answers.count}件の回答" %></span>
+        <% if post.best_answer.present? %>
+          <span class="text-danger float-right">解決済み！</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="col-sm-12 mb-3">
+  <%= paginate @posts %>
+  <div class="text-center">
+    <%= page_entries_info @posts, entry_name: '相談事' %>
+  </div>
+</div>
+
+

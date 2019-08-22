@@ -1,0 +1,8 @@
+ja:
+  posts:
+    new:
+      title: 何に悩んでる？
+    edit:
+      title: 編集
+    form:
+      include_blank: 選択してください

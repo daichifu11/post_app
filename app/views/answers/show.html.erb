@@ -1,0 +1,16 @@
+<div class="col-md-10 offset-md-1 mt-5 mb-5">
+  <div class="card border-secondary mb-3 p-3 mt-3">
+    <p><b><%= link_to "回答者: #{@answer.user.nick_name}さん #{@answer.user.gender} #{@answer.user.age} #{@answer.user.occupation}", 
+          admin_user_path(@post.user), {:style=>'color: #696969;', :class => "css_class"} %>
+    <hr size="10">
+    <p><%= simple_format @answer.body %></p>
+    <p>回答日: <%= @post.created_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+    <% if @answer.created_at != @answer.updated_at %>
+      <p>更新日: <%= @answer.updated_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+    <% end %>
+    <% if @answer.user_id == current_user.id %>
+      <%= link_to '編集', edit_post_answer_path(@post, @answer), class: 'btn btn-outline-primary' %>
+      <%= link_to '戻る', post_path(@post, @answer), class: 'btn btn-outline-secondary' %>
+    <% end %>
+  </div>
+</div>

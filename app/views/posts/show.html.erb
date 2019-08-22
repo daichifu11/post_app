@@ -1,0 +1,108 @@
+<div class="col-md-10 offset-md-1 mt-5 mb-5">
+  <div class="card border-secondary mb-3 p-2">
+    <div class="card-header"><p><b><%= @post.title %></b></p></div>
+    <div class="card-body text-dark">
+      <h4 class="card-title border-bottom border-dark"><p><%= @post.category&.name %></p></h4>
+      <p class="card-text"><p><%= simple_format @post.body %></p></p>
+      <p>投稿日: <%= @post.created_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+      <% if @post.created_at != @post.updated_at %>
+        <p>更新日: <%= @post.updated_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+      <% end %>
+      <p><b><%= link_to "相談者: #{@post.user.nick_name}さん #{@post.user.gender} #{@post.user.age} #{@post.user.occupation}", 
+            admin_user_path(@post.user), {:style=>'color: #696969;', :class => "css_class float-right"} %>
+    </div>
+  </div>
+  <% if @post.user_id == current_user.id %>
+    <%= link_to '編集', edit_post_path(@post), class: 'btn btn-outline-primary' %>
+    <%= button_tag '削除', class: 'btn btn-outline-danger', data: { toggle: 'modal', target: '#delete-post' } %>
+  <% elsif @answer.present? %>
+    <p>既に回答しました！</p>
+  <% else %>
+    <div class="pb-1">
+      <%= link_to '回答する', new_post_answer_path(@post), class: 'btn btn-outline-info pr-5 pl-5' %>
+    </div>
+  <% end %>
+  <%= link_to '戻る', posts_path, class: 'btn btn-outline-secondary' %>
+  <% if @best_answer.present? %>
+    <hr>
+    <h2 class="text-center">ベストアンサーに選ばれた回答</h2>
+    <hr>
+    <div class="card border-secondary mb-3 p-3">
+      <p><b><%= link_to "回答者: #{@best_answer.answer.user.nick_name}さん #{@best_answer.answer.user.gender} #{@best_answer.answer.user.age} #{@best_answer.answer.user.occupation}", 
+            admin_user_path(@post.user), {:style=>'color: #696969;', :class => "css_class"} %>
+      <hr>
+      <p><%= simple_format @best_answer.answer.body %></p>
+      <p>回答日: <%= @best_answer.answer.created_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+      <% if @best_answer.answer.created_at != @best_answer.answer.updated_at %>
+        <p>更新日: <%= @best_answer.answer.updated_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+      <% end %>
+      <%= link_to '詳細', "/posts/#{@post.id}/answers/#{@best_answer.answer.id}", class: 'btn btn-outline-primary' %>
+      <p class="pt-3"><b class="text-danger">ベストアンサーに選ばれた回答です！</b></p>
+    </div>
+  <% end %>
+    <hr>
+    <% if @post.answers.present?%>
+      <h2 class="text-center">回答一覧</h2>
+    <% else %>
+      <h2 class="text-center">まだ誰も回答していません</h2>
+    <% end %>
+  <hr>
+  <% @post.answers.eager_load(:user).each do |answer| %>
+    <div class="card border-secondary mb-3 p-3">
+      <p><b><%= link_to "回答者: #{answer.user.nick_name}さん #{answer.user.gender} #{answer.user.age} #{answer.user.occupation}", 
+            admin_user_path(@post.user), {:style=>'color: #696969;', :class => "css_class"} %>
+      <hr>
+      <p><%= simple_format answer.body %></p>
+      <p>回答日: <%= answer.created_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+      <% if answer.created_at != answer.updated_at %>
+        <p>更新日: <%= answer.updated_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+      <% end %>
+      <%= link_to '詳細', "/posts/#{@post.id}/answers/#{answer.id}", class: 'btn btn-outline-primary' %>
+      <% unless @post.user.already_bestanswered?(@post) %>
+        <% if @post.user_id == current_user.id%>
+          <%= link_to "#exampleModal", :data => {:toggle=>"modal", :role => "dialog"}, :class=>"btn btn-outline-danger" do %>
+            ベストアンサーにする
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">この投稿をベストアンサーにする</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ベストアンサーに選択すると、この相談は解決したことになります、よろしいですか？
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">いいえ</button>
+        <%= link_to "はい！", post_answer_best_answers_path(answer_id: @post.answers.ids, post_id: @post.id), method: :post, class: "btn btn-outline-primary" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="delete-post">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">この投稿を削除しますか？</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">いいえ</button>
+        <%= link_to '削除', post_path(@post), method: :delete, class: "btn btn-outline-danger" %>
+      </div>
+    </div>
+  </div>
+</div>

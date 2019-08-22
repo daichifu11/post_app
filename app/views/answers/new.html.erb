@@ -1,0 +1,22 @@
+<div class="col-md-10 offset-md-1 mt-5">
+  <h2 class="text-center">あなたの回答</h2>
+  <div class="mb-3">
+  </div>
+  <hr>
+  <%= render partial: 'form', locals: { post: @post, answer: @answer } %>
+</div>
+
+<div class="col-md-10 offset-md-1 mt-5">
+  <h2 class="text-center">相談の内容</h2>
+  <div class="card border-secondary mb-3 p-2">
+    <div class="card-header"><p><b><%= @post.title %></b></p></div>
+    <div class="card-body text-dark">
+      <h4 class="card-title border-bottom border-dark"><p><%= @post.category&.name %></p></h4>
+      <p class="card-text"><p><%= simple_format @post.body %></p></p>
+      <p>投稿日: <%= @post.created_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+      <p><b><%= link_to "相談者: #{@post.user.nick_name}さん #{@post.user.gender} #{@post.user.age} #{@post.user.occupation}", 
+            admin_user_path(@post.user), {:style=>'color: #696969;', :class => "css_class float-right"} %>
+    </div>
+  </div>
+</div>
+

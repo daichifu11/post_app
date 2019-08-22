@@ -1,0 +1,41 @@
+<div class="col-md-10 offset-md-1 mt-3">
+  <h1 class="text-center">新規登録</h1>
+  <%= form_with model: [:admin, @user], local: true do |f| %>
+  <%= render 'shared/errors', obj: @user %>
+    <div class="form-group">
+      <%= f.label :nick_name, 'ニックネーム' %>
+      <%= f.text_field :nick_name, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :email, 'メールアドレス' %>
+      <%= f.text_field :email, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :gender, '性別' %>
+      <%= f.select :gender, ["男性", "女性"], {}, { class: 'form-control' } %>
+    </div>
+    <div class="form-group">
+      <%= f.label :age, '年齢' %>
+      <%= f.select :age, [ "20代", "30代", "40代", "50代", "60代", "70代", "80代", "90代" ], {}, { class: 'form-control' } %>
+    </div>
+    <div class="form-group">
+      <%= f.label :occupation, '職業' %>
+      <%= f.select :occupation, [ "会社員", "公務員", "パート・アルバイト", "専業主婦", "無職" ], {}, { class: 'form-control' } %>
+    </div>
+    <div class="form-check">
+      <%= f.label :admin, class:'form-check-label' do %>
+        <%= f.check_box :admin, class: 'form-check-input'%>
+        <p>管理者権限</p>
+      <% end %>
+    </div>
+    <div class="form-group">
+      <%= f.label :password, 'パスワード' %>
+      <%= f.password_field :password, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :password_confirmation, 'パスワード(確認)' %>
+      <%= f.password_field :password_confirmation, class: 'form-control' %>
+    </div>
+    <%= f.submit '登録する', class: 'btn btn-outline-primary mb-2' %>
+  <% end %>
+</div>

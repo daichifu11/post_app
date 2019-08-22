@@ -1,0 +1,42 @@
+<%= @post.answers.each do |answer| %>
+  <div class="card border-secondary mb-3 p-3">
+    <p><b><%= link_to "回答者: #{answer.user.nick_name}さん #{answer.user.gender} #{answer.user.age} #{answer.user.occupation}", 
+          admin_user_path(@post.user), {:style=>'color: #696969;', :class => "css_class"} %>
+    <hr>
+    <p><%= simple_format answer.body %></p>
+    <p>回答日: <%= answer.created_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+    <% if answer.created_at != answer.updated_at %>
+      <p>更新日: <%= answer.updated_at.strftime("%Y年%m月%d日 %H:%M:%S") %></p>
+    <% end %>
+    <%= link_to '詳細', "/posts/#{@post.id}/answers/#{answer.id}", class: 'btn btn-outline-primary' %>
+    <% unless @post.user.already_bestanswered?(@post) %>
+      <% if @post.user_id == current_user.id %>
+        <%= link_to "#exampleModal", :data => {:toggle=>"modal", :role => "dialog"}, :class=>"btn btn-outline-danger" do %>
+          ベストアンサーにする
+        <% end %>
+      <% end %>
+    <% else %>
+        <p>ベストアンサーに選ばれた回答です</p>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">この投稿をベストアンサーにする</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ベストアンサーに選択すると、この相談は解決したことになります、よろしいですか？
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
+        <%= link_to "はい！", post_answer_best_answers_path(:answer_id => answer.id, :post_id => @post.id), method: :post, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+</div>
