@@ -49,6 +49,7 @@ test:
 #
 production:
   <<: *default
-  database: post_app_production
-  username: post_app
-  password: <%= ENV['POST_APP_DATABASE_PASSWORD'] %>
+  database: ENV["DATABASE_NAME"]
+  username: ENV["DATABASE_USER_NAME"]
+  password: ENV["DATABASE_PASSWORD"]
+  host: ENV["DATABASE_HOST"]
