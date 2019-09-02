@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_10_190537) do
+ActiveRecord::Schema.define(version: 2019_09_02_073536) do
 
   create_table "answers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "body", null: false
@@ -57,7 +57,6 @@ ActiveRecord::Schema.define(version: 2019_08_10_190537) do
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "admin", default: false, null: false
     t.string "gender", null: false
     t.string "age", null: false
     t.string "occupation", null: false
