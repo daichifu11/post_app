@@ -7,8 +7,7 @@ class BestAnswersController < ApplicationController
       user_id: current_user.id, 
       answer_id: params[:answer_id]
     }
-    bestanswer.save
-      BestAnswerMailer.best_answered_mail(post).deliver
+    bestanswer.save 
       redirect_to post_path(post), notice: 'ベストアンサーを選択しました'
   end
 end

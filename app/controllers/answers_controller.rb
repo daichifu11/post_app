@@ -16,7 +16,6 @@ class AnswersController < ApplicationController
       user_id: current_user.id
     }
     if @answer.save
-      AnswerMailer.answered_mail(@answer).deliver
       redirect_to @answer.post, notice: '回答しました'
     else
       render :new

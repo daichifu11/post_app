@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'a.way.notice@gmail.com'
-  layout 'mailer'
+  # default from: 'a.way.notice@gmail.com'
+  # layout 'mailer'
 
 end
